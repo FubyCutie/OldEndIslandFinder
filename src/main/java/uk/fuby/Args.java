@@ -37,7 +37,7 @@ public class Args {
 	
 	public static void showUsage() {
 		String usage = "" +
-				"Usage: OldEndIslandFinder [-s seed] [-d distance] [-v]\n" +
+				"Usage: OldEndIslandFinder -s [seed] [-d distance] [-q]\n" +
 				"\n" +
 				"Help:\n" +
 				"  -h, --help      displays this text\n" +
@@ -51,15 +51,14 @@ public class Args {
 				"      --start     set the starting distance in chunks, diameter\n" +
 				"\n" +
 				"Flags:\n" +
-				"  -v, --verbose   output whenever an island is found, not just at the end\n" +
+				"  -q, --quiet     do not output on each island, only at the end\n" +
 				"\n" +
 				"Default Values:\n" +
-				"  seed            0\n" +
 				"  distance        3064\n" +
 				"  x               0\n" +
 				"  z               0\n" +                                //      don't make lines
 				"  start           26\n" +                               //      longer than this
-				"  verbose         off\n" +                              //                |
+				"  quiet           off\n" +                              //                |
 				"\n" +                                                   //                v
 				"Note: the noise map nearly repeats after 3064 chunks, this means you can\n" +
 				"think of the any given 3064x3064 region as being representative of the\n" +
@@ -70,7 +69,11 @@ public class Args {
 				"Additionally, the noise subtraction hits its minimum of -200 at 200 blocks\n" +
 				"away, or about 13 chunks. This means any islands found closer are less\n" +
 				"likely to be part of the repeating pattern and in fact can be thought of\n" +
-				"as part of the main island.\n";
+				"as part of the main island.\n" +
+				"\n" +
+				"A good seed for testing is -1420259651, as it contains many islands\n" +
+				"\n" +
+				"java -jar OldEndIslandFinder.jar -s -1420259651\n";
 		System.out.println(usage);
 		System.exit(0);
 	}
@@ -80,9 +83,9 @@ public class Args {
 		int i = 0; // arg index
 		
 		// defaults
-		long seed = 0;
+		Long seed = null;
 		int searchDistance = 3064;
-		boolean extraOutput = false;
+		boolean extraOutput = true;
 		int x = 0;
 		int z = 0;
 		int startDistance = 26;
@@ -159,12 +162,18 @@ public class Args {
 				}
 			}
 			
-			if (arg.equals("-v") || arg.equals("--verbose")) {
-				extraOutput = true;
+			if (arg.equals("-q") || arg.equals("--quiet")) {
+				extraOutput = false;
 			}
 			
 			i++;
 		}
+		
+		if (seed == null) {
+			System.out.println("A seed must be provided.");
+			showUsage();
+		}
+		
 		return new Args(searchDistance, seed, extraOutput, x, z, startDistance);
 	}
 	
