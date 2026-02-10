@@ -71,7 +71,7 @@ public class Args {
 				"likely to be part of the repeating pattern and in fact can be thought of\n" +
 				"as part of the main island.\n" +
 				"\n" +
-				"A good seed for testing is -1420259651, as it contains many islands\n" +
+				"A good seed for testing is -1420259651 as it contains many islands\n" +
 				"\n" +
 				"java -jar OldEndIslandFinder.jar -s -1420259651\n";
 		System.out.println(usage);

@@ -15,7 +15,7 @@ public class Main {
 			System.out.print("found " + islands.size() + " islands, at:");
 			System.out.print(" [");
 			islands.forEach(island -> {
-				System.out.print("x: " + island.x + " z: " + island.z);
+				System.out.printf("(%d %d)", island.x, island.z);
 				if (islands.lastIndexOf(island) + 1 < islands.size()) {
 					System.out.print(", ");
 				}
@@ -51,9 +51,17 @@ public class Main {
 		for (long i = 0; i < (long) searchDistance * searchDistance; i++) {
 
 			if (gen.doThing((x + xOffset) * 2, y, (z + zOffset) * 2)) {
-				islands.add(new Pos((x + xOffset) * 16, (z + zOffset) * 16));
+				int blockX = (x + xOffset) * 16;
+				int blockZ = (z + zOffset) * 16;
+				
+				Pos pos = new Pos(blockX, blockZ);
+				
+				islands.add(pos);
 				if (args.extraOutput) {
-					System.out.println("island found at x: " + (x + xOffset) * 16 + " z: " + (z + zOffset) * 16);
+					String output = String.format(
+							"island found at x: %d z: %d (%s)", pos.x, pos.z, coordsToTp(pos)
+					);
+					System.out.println(output);
 				}
 			}
 
@@ -81,4 +89,9 @@ public class Main {
 		}
 		return !islands.isEmpty();
 	}
+	
+	public static String coordsToTp(Pos pos) {
+		return String.format("/tp %d ~ %d", pos.x, pos.z);
+	}
+	
 }
